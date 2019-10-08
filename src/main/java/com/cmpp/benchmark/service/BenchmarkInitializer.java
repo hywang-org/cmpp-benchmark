@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @DependsOn("cmppProperties")
@@ -25,17 +26,18 @@ public class BenchmarkInitializer implements CommandLineRunner {
     private final EndpointManager endpointManager = EndpointManager.INS;
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws InterruptedException {
         connCmppServer();
+        TimeUnit.SECONDS.sleep(5);
         EndpointConnector<?> endpointConnector = endpointManager.getEndpointConnector(CmppProperties.getCmppUsername());
         String[] mobiles = CmppProperties.getMobiles();
         for (String mobile : mobiles) {
             CmppSubmitRequestMessage request = buildMsg(mobile);
             endpointConnector.asynwrite(request).addListener(future -> {
                 if (future.isSuccess()) {
-                    System.out.println("发送成功");
+                    System.out.println("短信消息发送成功");
                 } else {
-                    System.out.println("发送失败");
+                    System.out.println("短信消息发送失败");
                 }
             });
 
