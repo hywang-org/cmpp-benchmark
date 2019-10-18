@@ -35,6 +35,8 @@ public class CmppProperties {
     private String mobiles;
     @Value("${cmpp.msg}")
     private String msg;
+    @Value("${cmpp.benchmark.concurrence}")
+    private int concurrent;
 
     private static Map<String, Object> properties = new HashMap<>();
 
@@ -50,7 +52,7 @@ public class CmppProperties {
         properties.put("speed", speed);
         properties.put("mobiles", mobiles);
         properties.put("msg", msg);
-        print();
+        properties.put("concurrent", concurrent);
     }
 
     public static String[] getMobiles() {
@@ -92,6 +94,10 @@ public class CmppProperties {
 
     public static String getCmppUsername() {
         return (String) properties.get("cmppUsername");
+    }
+
+    public static int getConcurrent() {
+        return (int) properties.get("concurrent");
     }
 
     private void print() {
